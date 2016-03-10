@@ -22,6 +22,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery-mobile": "^1.4.5"
+    "jquery": "1.11.1"
   }
 }

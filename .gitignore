@@ -2,3 +2,5 @@
 platforms/
 *~
 bower_components/
+www/lib/
+plugins/
