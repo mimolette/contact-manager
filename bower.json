@@ -1,0 +1,27 @@
+{
+  "name": "contact-manager",
+  "homepage": "https://github.com/mimolette/contact-manager",
+  "authors": [
+    "mimolette <louveciennes.gui_appa@yahoo.fr>"
+  ],
+  "description": "My first app about contact for mobile",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "contact",
+    "mobile",
+    "manager"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-mobile": "^1.4.5"
+  }
+}
