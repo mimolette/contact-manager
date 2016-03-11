@@ -1,6 +1,6 @@
 function Contact() {
   EventEmitter.call(this);
-  this.test = 444;
+  this.picture = 'img/contact.jpg';
 }
 
 Contact.prototype = Object.create(EventEmitter.prototype);
@@ -12,6 +12,15 @@ Contact.prototype.hydrate = function(ContactJSON) {
   this.setTel(ContactJSON.tel);
   this.setMail(ContactJSON.mail);
   this.setBirthDate(ContactJSON.dn);
+  this.setPicture(ContactJSON.picture);
+};
+
+Contact.prototype.isValid = function() {
+  var flag = true;
+
+  // TODO : implement different attribut regex's check
+
+  return flag;
 };
 
 Contact.prototype.setFirstname = function(fn) {
@@ -35,7 +44,12 @@ Contact.prototype.setMail = function(mail) {
 };
 
 Contact.prototype.setBirthDate = function(dn) {
-  this.birthDate = dn;
+  this.birthDate = moment(dn);
+  return this;
+};
+
+Contact.prototype.setPicture = function(img) {
+  this.picture = img;
   return this;
 };
 
@@ -57,4 +71,20 @@ Contact.prototype.getMail = function() {
 
 Contact.prototype.getBirthDate = function() {
   return this.birthDate;
+};
+
+Contact.prototype.getPicture = function() {
+  return this.picture;
+};
+
+Contact.prototype.getBirthDateFr = function() {
+  return this.birthDate.format('DD-MM-YYYY');
+};
+
+Contact.prototype.getBirthDateUS = function() {
+  return this.birthDate.format('YYYY-MM-DD');
+};
+
+Contact.prototype.getFullName = function() {
+  return this.firstname + ' ' + this.lastname;
 };

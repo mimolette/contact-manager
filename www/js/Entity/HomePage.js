@@ -4,7 +4,8 @@ function HomePage() {
   this.title = "Contacts";
   this.id = "page-home";
   this.url = "#" + this.id;
-  this.contacts = [];
+  this.contactDAO = new ContactDAO();
+  //this.contacts = [];
 
 }
 
@@ -24,10 +25,19 @@ HomePage.prototype.getUrl = function() {
 };
 
 HomePage.prototype.addContact = function(contact) {
-  this.contacts.push(contact);
-  this.emit('CONTACTS_CHANGE', contact);
+  if(this.contactDAO.addContact(contact)) {
+    this.emit('CONTACTS_REFRESH');
+  } else {
+    this.emit('CONTACTS_NEW', contact);
+  }
 };
 
-HomePage.prototype.getContacts = function() {
-  return this.contacts;
+HomePage.prototype.removeContact = function(contact) {
+  if(this.contactDAO.removeContact(contact)) {
+    this.emit('CONTACTS_REFRESH');
+  }
+};
+
+HomePage.prototype.getContactDAO = function() {
+  return this.contactDAO;
 };

@@ -1,0 +1,9 @@
+.align-right{
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.picture-detail{
+  width: 90%;
+}

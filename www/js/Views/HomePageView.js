@@ -12,8 +12,60 @@ HomePageView.prototype.constructor = HomePageView;
 
 HomePageView.prototype.listen = function() {
 
-  this.model.on('CONTACTS_CHANGE', this.displayContactAction.bind(this));
+  this.model.on('CONTACTS_NEW', this.displayContactAction.bind(this));
+  this.model.on('CONTACTS_REFRESH', this.displayRefreshAction.bind(this));
 
+};
+
+HomePageView.prototype.renderContact = function(data) {
+  var elt = $('<li>');
+  var eltA = $('<a>')
+      .appendTo(elt)
+      .attr('href', '#');
+
+  var picture = $('<img>')
+      .attr('src', data.getPicture())
+      .attr('alt', data.getFullName())
+      .appendTo(eltA);
+
+  var name = $('<h2>')
+      .html(data.getFullName())
+      .appendTo(eltA);
+
+  var mail = $('<p>')
+      .html(data.getMail())
+      .appendTo(eltA);
+
+  // attach event on click, emit to controller
+  eltA.click(this.emit.bind(this, 'DETAIL_PAGE', data));
+
+  return elt;
+};
+
+HomePageView.prototype.displayRefreshAction = function() {
+  if(!this.htmlEltListContacts) {
+    this.htmlEltListContacts = $('<ul>')
+        .attr('data-role', 'listview')
+        .attr('data-insert', 'true')
+        .appendTo(this.htmlEltContent)
+        .listview();
+
+    // remove the <p>
+    this.htmlEltNoContact.css('display', 'none');
+  } else {
+    this.htmlEltListContacts.html('');
+  }
+
+  var contacts = this.model.getContactDAO().getContacts();
+
+  if (contacts.length) {
+    contacts.forEach(function (contact) {
+      this.htmlEltListContacts.append(this.renderContact(contact));
+    }, this);
+    this.htmlEltListContacts.listview( "refresh" );
+  } else {
+    this.htmlEltNoContact.css('display', 'block');
+  }
 };
 
 HomePageView.prototype.displayContactAction = function(contact) {
@@ -29,14 +81,7 @@ HomePageView.prototype.displayContactAction = function(contact) {
     this.htmlEltNoContact.css('display', 'none');
   }
 
-  //console.log(contact.getFirstname());
-  var elt = $('<li>');
-  var eltA = $('<a>')
-      .appendTo(elt)
-      .html(contact.getFirstname())
-      .attr('href', '#');
-
-  this.htmlEltListContacts.append(elt);
+  this.htmlEltListContacts.append(this.renderContact(contact));
   this.htmlEltListContacts.listview( "refresh" );
 };
 
@@ -58,8 +103,7 @@ HomePageView.prototype.renderHtml = function() {
   // elt footer
   var eltFooter = $('<div>')
       .attr('data-role', 'footer')
-      .attr('data-position', 'fixed')
-      .html('footer content');
+      .attr('data-position', 'fixed');
   eltPage.append(eltFooter);
 
   // add to body
@@ -96,7 +140,7 @@ HomePageView.prototype.renderHtmlContent = function() {
       .attr('data-role', 'ui-content');
 
 
-  var contacts = this.model.getContacts();
+  var contacts = this.model.getContactDAO().getContacts();
 
   if (contacts.length) {
     this.htmlEltListContacts = $('<ul>')
@@ -105,12 +149,7 @@ HomePageView.prototype.renderHtmlContent = function() {
         .appendTo(eltMain);
 
     contacts.forEach(function(contact) {
-      var elt = $('<li>');
-      var eltA = $('<a>')
-          .appendTo(elt)
-          .html(contact.getFirstname())
-          .attr('href', '#');
-      elt.appendTo(this.htmlEltListContacts);
+      this.htmlEltListContacts.append(this.renderContact(contact));
     }, this);
   } else {
     this.htmlEltNoContact = $('<p>')

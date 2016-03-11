@@ -25,15 +25,38 @@ AddPageView.prototype.attachEvent = function() {
   }.bind(this));
 
   var fields = ['Firstname', 'Lastname', 'Tel', 'Mail', 'BirthDate'];
+  // attach event on each field of form
+  fields.forEach(function(field) {
+    var eltHtml = 'htmlEltInput' + field;
+    if(this[eltHtml]) {
+      this[eltHtml].blur(function(e) {
+        // emit event on input change event
+        var eventName = 'DATA_' + field.toUpperCase() + '_CHANGE';
+        this.emit(eventName, {field: field, value: $(e.target).val()});
+      }.bind(this));
+    }
+  }, this);
 
-  this.htmlEltInputFirstname.change(function(e) {
-    // emit event an input change
-    this.emit('DATA_FIRSTNAME_CHANGE', { field : "firstname", value : $(e.target).val()});
-  }.bind(this));
 };
 
 AddPageView.prototype.listen = function() {
+  this.model.on('CONTACT_CHANGE', this.displayAction.bind(this));
+};
 
+AddPageView.prototype.displayAction = function() {
+  var fields = ['Firstname', 'Lastname', 'Tel', 'Mail'];
+  // update display
+  fields.forEach(function(field) {
+    var eltHtml = 'htmlEltInput' + field;
+    if(this[eltHtml]) {
+      var method = 'get' + field;
+      console.log(this.model.getContact()[method]());
+      this[eltHtml].val(this.model.getContact()[method]());
+    }
+  }, this);
+
+  // specific work for the date
+  this.htmlEltInputBirthDate.val(this.model.getContact().getBirthDateUS());
 };
 
 AddPageView.prototype.renderHtml = function() {
@@ -54,8 +77,7 @@ AddPageView.prototype.renderHtml = function() {
   // elt footer
   var eltFooter = $('<div>')
       .attr('data-role', 'footer')
-      .attr('data-position', 'fixed')
-      .html('footer content');
+      .attr('data-position', 'fixed');
   eltPage.append(eltFooter);
 
   // add to body

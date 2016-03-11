@@ -29,5 +29,6 @@ AddPage.prototype.getContact = function() {
 
 AddPage.prototype.setContact = function(contact) {
   this.contact = contact;
+  this.emit('CONTACT_CHANGE');
   return this;
 };
