@@ -18,7 +18,6 @@ DetailPageView.prototype.attachEvent = function() {
 
   this.htmlEltActionDelete.click(function() {
     this.emit('DELETE_ACTION', this.model.getContact());
-    console.log(this.model.getContact());
   }.bind(this));
 };
 
