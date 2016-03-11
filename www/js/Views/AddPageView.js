@@ -50,7 +50,6 @@ AddPageView.prototype.displayAction = function() {
     var eltHtml = 'htmlEltInput' + field;
     if(this[eltHtml]) {
       var method = 'get' + field;
-      console.log(this.model.getContact()[method]());
       this[eltHtml].val(this.model.getContact()[method]());
     }
   }, this);
@@ -186,7 +185,7 @@ AddPageView.prototype.renderHtmlContent = function() {
   this.htmlEltInputBirthDate = $('<input type="date" name="contactBirthDate">')
       .attr('id', 'contactBirthDate')
       .attr('data-clear-btn', 'true')
-      .val(this.model.getContact().getBirthDate())
+      .val(this.model.getContact().getBirthDateUS())
       .appendTo(eltLi5);
 
   // Buttons

@@ -1,12 +1,12 @@
-function AppController(contacts) {
-
-  // TODO : remove contacts and use database
-  //this.contacts = contacts;
+function AppController() {
 
 }
 
 AppController.prototype.listenHomePage = function() {
   this.homePageModelView.on('DETAIL_PAGE', this.showDetailAction.bind(this));
+  this.homePageModelView.on('ADD_PAGE', this.showAddAction.bind(this));
+  this.homePageModelView.on('SORT_ASC', this.sortAction.bind(this, false));
+  this.homePageModelView.on('SORT_DESC', this.sortAction.bind(this, true));
 };
 
 AppController.prototype.listenAddPage = function() {
@@ -24,6 +24,10 @@ AppController.prototype.listenDetailPage = function() {
   this.detailPageModelView.on('DELETE_ACTION', this.contactDeleteAction.bind(this));
 };
 
+AppController.prototype.sortAction = function(reverse) {
+  this.homePageModel.sortAction(reverse);
+};
+
 AppController.prototype.contactEditAction = function(contact) {
   // update contact to addPageModel
   this.addPageModel.setContact(contact);
@@ -36,6 +40,13 @@ AppController.prototype.contactDeleteAction = function(contact) {
   this.homePageModel.removeContact(contact);
   // naviguate to view homePageView
   this.navigateAction(this.homePageModel.getUrl());
+};
+
+AppController.prototype.showAddAction = function() {
+  // change the value of the contact to addPageModel
+  this.addPageModel.setContact(new Contact());
+  // navigate to detailPageModelView
+  this.navigateAction(this.addPageModel.getUrl());
 };
 
 

@@ -1,5 +1,6 @@
 function ContactDAO() {
   this.contacts = this.getAllContacts();
+  this.sortByLastname();
 }
 
 ContactDAO.prototype.getAllContacts = function() {
@@ -15,6 +16,21 @@ ContactDAO.prototype.getAllContacts = function() {
   } else {
     return [];
   }
+};
+
+ContactDAO.prototype.sortByLastname = function(reverse) {
+  reverse = reverse || false;
+  this.contacts.sort(function(a, b) {
+    if(a.getLastname() > b.getLastname()) {
+      return !reverse;
+    } else if(a.getLastname() < b.getLastname()) {
+      return reverse;
+    } else {
+      return 0;
+    }
+  });
+
+  return true;
 };
 
 ContactDAO.prototype.getContacts = function() {

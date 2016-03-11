@@ -38,6 +38,12 @@ HomePage.prototype.removeContact = function(contact) {
   }
 };
 
+HomePage.prototype.sortAction = function(reverse) {
+  if(this.contactDAO.sortByLastname(reverse)) {
+    this.emit('CONTACTS_REFRESH');
+  }
+};
+
 HomePage.prototype.getContactDAO = function() {
   return this.contactDAO;
 };

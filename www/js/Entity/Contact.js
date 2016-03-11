@@ -1,6 +1,11 @@
 function Contact() {
   EventEmitter.call(this);
   this.picture = 'img/contact.jpg';
+  this.regexFirstname = new RegExp(/^[a-zàâçéèêëîïôûùüÿñ .-]{3,}$/, 'i');
+  this.regexLastname = new RegExp(/^[a-zàâçéèêëîïôûùüÿñ .-]{3,}$/, 'i');
+  this.regexTel = new RegExp(/^([0-9]{2}[ -/]?){5}$/);
+  this.regexMail = new RegExp(/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/, 'i');
+  this.birthDate = moment('1970-01-01');
 }
 
 Contact.prototype = Object.create(EventEmitter.prototype);
@@ -16,11 +21,13 @@ Contact.prototype.hydrate = function(ContactJSON) {
 };
 
 Contact.prototype.isValid = function() {
-  var flag = true;
 
-  // TODO : implement different attribut regex's check
+  if(!this.regexFirstname.test(this.firstname)) return false;
+  if(!this.regexLastname.test(this.lastname)) return false;
+  if(!this.regexTel.test(this.tel)) return false;
+  if(!this.regexMail.test(this.mail)) return false;
 
-  return flag;
+  return true;
 };
 
 Contact.prototype.setFirstname = function(fn) {
@@ -78,13 +85,21 @@ Contact.prototype.getPicture = function() {
 };
 
 Contact.prototype.getBirthDateFr = function() {
-  return this.birthDate.format('DD-MM-YYYY');
+  if(this.birthDate.format) {
+    return this.birthDate.format('DD-MM-YYYY');
+  } else {
+    return null;
+  }
 };
 
 Contact.prototype.getBirthDateUS = function() {
-  return this.birthDate.format('YYYY-MM-DD');
+  if(this.birthDate.format) {
+    return this.birthDate.format('YYYY-MM-DD');
+  } else {
+    return null;
+  }
 };
 
 Contact.prototype.getFullName = function() {
-  return this.firstname + ' ' + this.lastname;
+  return this.lastname + ' ' + this.firstname;
 };

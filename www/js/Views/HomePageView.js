@@ -4,6 +4,7 @@ function HomePageView(model) {
   this.model = model;
   this.listen();
   this.renderHtml();
+  this.attachEvent();
 
 }
 
@@ -15,6 +16,12 @@ HomePageView.prototype.listen = function() {
   this.model.on('CONTACTS_NEW', this.displayContactAction.bind(this));
   this.model.on('CONTACTS_REFRESH', this.displayRefreshAction.bind(this));
 
+};
+
+HomePageView.prototype.attachEvent = function() {
+  this.htmlEltAddBtn.click(this.emit.bind(this, 'ADD_PAGE'));
+  this.htmlEltSortBtnAsc.click(this.emit.bind(this, 'SORT_ASC'));
+  this.htmlEltSortBtnDesc.click(this.emit.bind(this, 'SORT_DESC'));
 };
 
 HomePageView.prototype.renderContact = function(data) {
@@ -106,6 +113,27 @@ HomePageView.prototype.renderHtml = function() {
       .attr('data-position', 'fixed');
   eltPage.append(eltFooter);
 
+  var eltNavBar = $('<div>')
+      .attr('data-role', 'navbar')
+      .appendTo(eltFooter);
+
+  var eltUl = $('<ul>')
+      .appendTo(eltNavBar);
+
+  var eltLi1 = $('<li>')
+      .appendTo(eltUl);
+  this.htmlEltSortBtnAsc = $('<a>')
+      .attr('href', '#')
+      .html('A..Z')
+      .appendTo(eltLi1);
+
+  var eltLi2 = $('<li>')
+      .appendTo(eltUl);
+  this.htmlEltSortBtnDesc = $('<a>')
+      .attr('href', '#')
+      .html('Z..A')
+      .appendTo(eltLi2);
+
   // add to body
   $('body').append(eltPage);
 
@@ -126,7 +154,7 @@ HomePageView.prototype.renderHtmlHeader = function() {
   // button to add Contact
   this.htmlEltAddBtn = $('<a>')
       .attr('id', 'page-add')
-      .attr('href', '#page-add')
+      .attr('href', '#')
       .attr('data-icon', 'plus')
       .addClass('ui-btn-right')
       .html('Ajouter')
